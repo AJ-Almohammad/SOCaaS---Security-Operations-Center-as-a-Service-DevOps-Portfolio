@@ -1,5 +1,11 @@
 # 🛡️ SOCaaS - Security Operations Center as a Service
 
+## 🌐 Live Project
+
+**[Main Landing Page](https://socaas-dashboards-h1hn99gpf-ajalmohammads-projects.vercel.app)** - Complete Project Overview & Interactive Dashboards
+
+---
+
 ## 📊 Live Dashboards
 
 - **[Security Operations Dashboard](https://aj-almohammad.github.io/SOCaaS---Security-Operations-Center-as-a-Service-DevOps-Portfolio/security-dashboard.html)** - Real-time Security Monitoring & DevOps Pipeline Status
