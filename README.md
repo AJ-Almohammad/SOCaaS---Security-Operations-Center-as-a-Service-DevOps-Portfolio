@@ -2,8 +2,8 @@
 
 ## 📊 Live Dashboards
 
-- **[Security Operations Dashboard](security-dashboard.html)** - Real-time Security Monitoring & DevOps Pipeline Status
-- **[AWS Services Dashboard](aws-services-dashboard.html)** - Infrastructure Overview & Cloud Services Utilization
+- **[Security Operations Dashboard](https://aj-almohammad.github.io/SOCaaS---Security-Operations-Center-as-a-Service-DevOps-Portfolio/security-dashboard.html)** - Real-time Security Monitoring & DevOps Pipeline Status
+- **[AWS Services Dashboard](https://aj-almohammad.github.io/SOCaaS---Security-Operations-Center-as-a-Service-DevOps-Portfolio/aws-services-dashboard.html)** - Infrastructure Overview & Cloud Services Utilization
 
 ---
 
