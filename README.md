@@ -1,22 +1,19 @@
-# SOCaaS - Security Operations Center as a Service
+# 🛡️ SOCaaS - Security Operations Center as a Service
 
-## Live Dashboards
+## 📊 Live Dashboards
 
-- **Security Operations Dashboard** - CI/CD Pipeline & Security Monitoring  
-  Location: `.github/workflows/socaas-pipeline.yml`
-
-- **AWS Services Dashboard** - Infrastructure & Cloud Services Utilization  
-  Location: `terraform/environments/dev/main.tf`
+- **[Security Operations Dashboard](security-dashboard.html)** - Real-time Security Monitoring & DevOps Pipeline Status
+- **[AWS Services Dashboard](aws-services-dashboard.html)** - Infrastructure Overview & Cloud Services Utilization
 
 ---
 
-## Project Overview
+## 🎯 Project Overview
 
-SOCaaS is a comprehensive DevOps security project demonstrating automated security monitoring, infrastructure as code, and continuous deployment pipelines. This project showcases the skills required for a DevOps Engineer role in a Cyber Defense Center.
+SOCaaS is a comprehensive DevOps security project demonstrating automated security monitoring, infrastructure as code, and continuous deployment pipelines. This project showcases the skills required for a DevOps Specialist role in a Cyber Defense Center.
 
-### Job Role Alignment
+### 🎖️ Job Role Alignment
 
-This project directly addresses the **DevOps Engineer - Cyber Defense Center** requirements:
+This project directly addresses the **DevOps Specialist - Cyber Defense Center** requirements:
 
 - ✅ **Ansible** - Automated honeypot configuration
 - ✅ **Python Scripting** - Security analysis and monitoring

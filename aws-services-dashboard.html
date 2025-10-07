@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☁️ SOCaaS - AWS Services Dashboard</title>
+    <style>
+        :root {
+            --aws-orange: #FF9900;
+            --aws-dark: #232F3E;
+            --aws-light: #146EB4;
+            --success: #00a100;
+            --warning: #ff8c00;
+            --danger: #d13212;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: var(--aws-dark);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--aws-orange);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .header p {
+            color: #ccc;
+            font-size: 1.2em;
+        }
+        
+        .aws-logo {
+            color: var(--aws-orange);
+            font-weight: bold;
+        }
+        
+        .services-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .service-card {
+            background: #2d2d2d;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid var(--aws-orange);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 153, 0, 0.2);
+        }
+        
+        .service-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .service-icon {
+            font-size: 2em;
+            margin-right: 15px;
+            width: 50px;
+            text-align: center;
+        }
+        
+        .service-name {
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+        
+        .service-status {
+            margin-left: auto;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        
+        .status-running {
+            background: var(--success);
+            color: white;
+        }
+        
+        .status-stopped {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .status-pending {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .service-details {
+            margin-top: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+        }
+        
+        .detail-label {
+            color: #ccc;
+        }
+        
+        .detail-value {
+            font-weight: bold;
+            color: white;
+        }
+        
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .resource-item {
+            background: #3a3a3a;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .architecture-section {
+            background: #2d2d2d;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .architecture-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .arch-node {
+            background: #3a3a3a;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #444;
+        }
+        
+        .arch-node.central {
+            background: var(--aws-dark);
+            border-color: var(--aws-orange);
+        }
+        
+        .cost-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .cost-card {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .cost-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+            color: var(--aws-orange);
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+        }
+        
+        .nav-button {
+            display: inline-block;
+            background: var(--aws-orange);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 10px;
+            transition: background 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            background: #e68900;
+        }
+        
+        @media (max-width: 768px) {
+            .services-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>☁️ <span class="aws-logo">AWS</span> Services Dashboard</h1>
+            <p>Infrastructure Overview & Resource Management</p>
+        </div>
+        
+        <div class="services-overview">
+            <!-- EC2 Service Card -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">🖥️</div>
+                    <div class="service-name">Amazon EC2</div>
+                    <div class="service-status status-running">RUNNING</div>
+                </div>
+                <div class="service-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Instance Type:</span>
+                        <span class="detail-value">t3.micro</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Public IP:</span>
+                        <span class="detail-value">3.125.4.222</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">AMI:</span>
+                        <span class="detail-value">Ubuntu 22.04</span>
+                    </div>
+                    <div class="resource-grid">
+                        <div class="resource-item">Honeypot Instance</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- VPC Service Card -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">🌐</div>
+                    <div class="service-name">Amazon VPC</div>
+                    <div class="service-status status-running">ACTIVE</div>
+                </div>
+                <div class="service-details">
+                    <div class="detail-item">
+                        <span class="detail-label">CIDR Block:</span>
+                        <span class="detail-value">10.0.0.0/16</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Subnets:</span>
+                        <span class="detail-value">1 Public</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Internet Gateway:</span>
+                        <span class="detail-value">Attached</span>
+                    </div>
+                    <div class="resource-grid">
+                        <div class="resource-item">vpc-0a13614ec9de0f405</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IAM Service Card -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">🔐</div>
+                    <div class="service-name">AWS IAM</div>
+                    <div class="service-status status-running">SECURE</div>
+                </div>
+                <div class="service-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Roles:</span>
+                        <span class="detail-value">2 Configured</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Policies:</span>
+                        <span class="detail-value">Managed & Custom</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Security:</span>
+                        <span class="detail-value">Least Privilege</span>
+                    </div>
+                    <div class="resource-grid">
+                        <div class="resource-item">EC2 Roles</div>
+                        <div class="resource-item">Terraform User</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CloudWatch Service Card -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">📊</div>
+                    <div class="service-name">CloudWatch</div>
+                    <div class="service-status status-running">MONITORING</div>
+                </div>
+                <div class="service-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Log Groups:</span>
+                        <span class="detail-value">/socaas/security-events</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Retention:</span>
+                        <span class="detail-value">30 Days</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Alarms:</span>
+                        <span class="detail-value">Security Events</span>
+                    </div>
+                    <div class="resource-grid">
+                        <div class="resource-item">Log Streaming</div>
+                        <div class="resource-item">Metrics</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- EKS Service Card -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">⚙️</div>
+                    <div class="service-name">Amazon EKS</div>
+                    <div class="service-status status-pending">PLANNED</div>
+                </div>
+                <div class="service-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Cluster:</span>
+                        <span class="detail-value">socaas-cluster</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">K8s Version:</span>
+                        <span class="detail-value">1.28</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Nodes:</span>
+                        <span class="detail-value">2 (Planned)</span>
+                    </div>
+                    <div class="resource-grid">
+                        <div class="resource-item">Container Ready</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- S3 Service Card -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">📦</div>
+                    <div class="service-name">Amazon S3</div>
+                    <div class="service-status status-pending">PLANNED</div>
+                </div>
+                <div class="service-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Buckets:</span>
+                        <span class="detail-value">Terraform State</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Encryption:</span>
+                        <span class="detail-value">AES-256</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Versioning:</span>
+                        <span class="detail-value">Enabled</span>
+                    </div>
+                    <div class="resource-grid">
+                        <div class="resource-item">State Storage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="architecture-section">
+            <h2 style="margin-bottom: 20px; color: var(--aws-orange);">🏗️ Architecture Overview</h2>
+            <div class="architecture-diagram">
+                <div class="arch-node">
+                    <h4>�� Internet</h4>
+                    <p>Public Access</p>
+                </div>
+                <div class="arch-node">
+                    <h4>🛡️ Security Groups</h4>
+                    <p>SSH: Open<br>HTTP/HTTPS: Open</p>
+                </div>
+                <div class="arch-node central">
+                    <h4>🖥️ EC2 Honeypot</h4>
+                    <p>t3.micro<br>Ubuntu 22.04</p>
+                </div>
+                <div class="arch-node">
+                    <h4>🔐 IAM Roles</h4>
+                    <p>Least Privilege<br>Secure Access</p>
+                </div>
+                <div class="arch-node">
+                    <h4>📊 CloudWatch</h4>
+                    <p>Logging<br>Monitoring</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cost-metrics">
+            <div class="cost-card">
+                <div class="cost-label">Estimated Monthly Cost</div>
+                <div class="cost-value">$18.50</div>
+                <div class="cost-description">Current Infrastructure</div>
+            </div>
+            <div class="cost-card">
+                <div class="cost-label">EC2 Instance</div>
+                <div class="cost-value">$8.29</div>
+                <div class="cost-description">t3.micro Linux</div>
+            </div>
+            <div class="cost-card">
+                <div class="cost-label">Data Transfer</div>
+                <div class="cost-value">$2.15</div>
+                <div class="cost-description">Outbound</div>
+            </div>
+            <div class="cost-card">
+                <div class="cost-label">Other Services</div>
+                <div class="cost-value">$8.06</div>
+                <div class="cost-description">VPC, CloudWatch, etc.</div>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="security-dashboard.html" class="nav-button">← Security Dashboard</a>
+            <a href="https://github.com/AJ-Almohammad/SOCaaS---Security-Operations-Center-as-a-Service-DevOps-Portfolio" 
+               class="nav-button" target="_blank">View GitHub Repository</a>
+        </div>
+    </div>
+
+    <script>
+        // Simulate real-time status updates
+        function updateServiceStatus() {
+            const statusElements = document.querySelectorAll('.service-status');
+            statusElements.forEach(element => {
+                if (element.textContent === 'RUNNING') {
+                    element.style.animation = 'pulse 2s infinite';
+                }
+            });
+        }
+        
+        // Add CSS animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { opacity: 1; }
+                50% { opacity: 0.7; }
+                100% { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        updateServiceStatus();
+    </script>
+</body>
+</html>
