@@ -1,0 +1,47 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform.tfstate.lock.info
+
+# SSH Keys
+**/socaas_key
+**/*.pem
+**/id_rsa*
+**/id_dsa*
+
+# Ansible
+**/*.retry
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# AWS
+**/.aws/credentials
+
+# GitHub Actions
+!.github/workflows/
